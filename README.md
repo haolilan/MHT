@@ -1,5 +1,1 @@
-# MHT
-
-This contains the R code for the statistical analysis of our six-month longitudinal study on menopausal hormone therapy in a perimenopausal cohort. Our paper has preprinted on xxx  titled xxxxx
-
-## 
+This repository supports the manuscript titled 'XXXXX' by providing the underlying methods and data analysis scripts to ensure reproducibility. As the manuscript is currently under peer review, the dataset provided here is simulated for demonstration purposes. This repository is intended specifically for reviewer evaluation. Upon formal publication, the complete and official dataset will be released.
