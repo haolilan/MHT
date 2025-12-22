@@ -1,0 +1,2 @@
+"factor","SampleNum","Df","SumsOfSqs","R2","F.Model","Pvalue","Disp_pval","R2.adjust","Padjust","var_type","na_count","stats"
+"Time",80,3,0.20334776725036,0.0243679756027381,0.632740657507707,1,1,-0.0141438148339958,1,"factor","0","BL:20; T04:20; T12:20; T24:20"
