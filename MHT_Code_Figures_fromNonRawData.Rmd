@@ -1,0 +1,318 @@
+---
+title: "Menopause Hormone Therapy (MHT) Longitudinal & Cross-Sectional Evaluation"
+author: "Lilan Hao"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    theme: cosmo
+    highlight: tango
+---
+
+# Executive Summary & Overview
+
+This platform evaluates the longitudinal shifts and cross-sectional dynamics of clinical index and microbiome under Menopause Hormone Therapy.
+
+**Note:** To facilitate code verification during peer review while safeguarding pre-publication raw data, a **pseudo-dataset containing simulated noise** has been made available at <https://github.com/haolilan/MHT/>. Please note that this version is intended strictly for code testing and [**does not constitute the original study data.**]{.underline}
+
+```{r setup, include=TRUE}
+Sys.setenv("_R_CHECK_LIMIT_CORES_" = "FALSE")
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE, eval = TRUE)
+PROJECT_ROOT <- "D:/WorkProjects/Demo-MHT 2026"
+knitr::opts_knit$set(root.dir = PROJECT_ROOT)
+setwd(PROJECT_ROOT)
+```
+
+**Please modify the `"eval = FALSE"` to `"eval = TRUE"` in next rows**
+
+```{r code set, include = TRUE, eval = FALSE, results = 'hide'}
+# code list
+scripts_to_run <- c(
+  # --- Overall Evaluation ---
+  "src/Overall.Evaluation.Clinic_Microbe.R",
+  "src/Overall.Evaluation.CST_Clustering.R",
+  "src/Overall.Evaluation.CST_bray.R",
+  "src/Overall.Evaluation.VA_Ref_Microbe.R",
+  "src/Overall.Evaluation.VA_Ref_UR_Diversity.R",
+  "src/Correlation_clinic.R",
+  "src/Permanova.R",
+
+  # --- Response Group ---
+  "src/Responser.Evaluation.Clinic_Microbe.R",
+  "src/Responser.Evaluation.CST.R",
+  "src/Responser.Evaluation.Cross_clinic.R",
+  "src/Responser.Evaluation.Cross_Microbe_CST.R",
+  "src/Responser.Evaluation.Cross_clinic.Delta.R",
+  "src/Stat.responser.R",
+  
+  # --- Prediction Model ---
+  "src/RF_classifer_simplified_revised_0715.R",
+  "src/RF_GUT_Features_Correlation.R",
+  
+  # --- Others ---
+  "src/Correlation_glm_phen_species.R",
+  "src/Mediation_FSFI_Vagina.R",
+  "src/VA_Type_TrendLine.R",
+  "src/VA_CST_shift_FSFI_Lc.R"
+)
+
+# run
+invisible(lapply(scripts_to_run, function(scr) {
+  if (file.exists(scr)) {
+    source(scr)
+    setwd(PROJECT_ROOT)
+  } else {
+    warning(paste("It cannot be found：", scr))
+  }
+}))
+
+knitr::opts_knit$set(root.dir = PROJECT_ROOT)
+```
+
+# 1. Overall Evaluation (Cohort Level)
+
+## Clinical Index Change
+
+```{r Clinic_Heatmap, out.width="100%", out.height="200px", fig.align='left', fig.cap= "Figure 1. Longitudinal paired differences of clinical continuous parameters (Hormone & metabolites) across timepoints."}
+# heatmap 1：Hormone & metabolites
+knitr::include_graphics("Results/OverallEva/Clinic/Global_wilcox.phen_nonK.heatmap.pdf")
+```
+
+```{r Clinic_Heatmap2, out.width="80%", out.height="400px", fig.align='left', fig.cap= "Figure 1. Longitudinal paired differences of clinical continuous parameters (K) across timepoints."}
+# heatmap 2：mKI & sub mKI
+knitr::include_graphics("Results/OverallEva/Clinic/Global_wilcox.phen_K.heatmap.pdf")
+```
+
+## Delta_KScore_Hormone_Metabolite
+
+```{r Delta_KScore_Hormone_Metabolite,out.width="49%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Association_Clinic/Fig1.d.Spearman.Delta_KScore_Hormone_Metabolite.intra.pdf")
+```
+
+## Permanova
+
+```{r Permanova,out.width="60%",out.height="400px" }
+knitr::include_graphics("Results/Permanova/Whole/Combined_all_wide.pdf")
+knitr::include_graphics("Results/Permanova/Timepoint/Combined_timepoint.pairs.pdf")
+```
+
+## Microbes Change
+
+```{r Microbe_Heatmap, out.width="49%",out.height="400px", fig.align='left', fig.cap= "Figure 2. Longitudinal paired differences of Vaginal microbe across timepoints (with Vaginal Reference)."}
+knitr::include_graphics("Results/OverallEva/VA_REF_Microbe/VA_Ref_Only.TimeDiff.wilcox.heatmap.pdf")
+```
+
+```{r Microbe_Heatmap_2, out.width="100%",out.height="200px", fig.align='left', fig.cap= "Figure 2. Longitudinal paired differences of multiple sites microbe across timepoints."}
+knitr::include_graphics("Results/OverallEva/Microbe/Paired.sample.Global.TimeDiff.wilcox.heatmap.pdf")
+```
+
+## VA & VA-Ref & UR
+
+### Bray - Shannon - composition bar
+
+```{r VA & UR bray, out.width="35%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/CST_Bray/UR_bray_distance_boxplot.pdf")
+knitr::include_graphics("Results/OverallEva/CST_Bray/VA_bray_distance_boxplot.pdf")
+```
+
+```{r VA & UR PCOA-SHANNON, out.width="49%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/VA_REF_UR/Combined_UR_VA_Ref.PCoA_Timepoint.pdf")
+knitr::include_graphics("Results/OverallEva/VA_REF_UR/Combined_UR_VA_Ref.PCoA_CST.pdf")
+
+knitr::include_graphics("Results/OverallEva/VA_REF_UR/Combined_UR_VA_Ref.Shannon_Timepoint.pdf")
+```
+
+```{r VA & UR Bar, out.width="70%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/VA_REF_UR/VA_UR_barplot.pdf")
+```
+
+### Comparison VA & UR
+
+```{r VA & UR comparison, out.width="49%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/VA_REF_UR/Consistence_of_CSTs_4samp.pdf")
+knitr::include_graphics("Results/OverallEva/VA_REF_UR/Combined_UR_VA_Ref.Shannon_CST.pdf")
+```
+
+```{r VA & UR comparison-CST, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/VA_REF_UR/CST_clogit_facet_forest_plot.pdf")
+```
+
+## CST for VA, UR, GUT, TO
+
+### Props
+
+strict_4 samples
+
+```{r CST Props strict_4, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/CST_Bray/CST_Longitudinal_Proportions_strict_4.pdf")
+```
+
+```{r CST Props logis strict_4, out.width="90%",out.height="600px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/CST_Bray/CST_Longitudinal_Logistic_Forest_strict_4.pdf")
+```
+
+### top 6 species
+
+```{r CST top6 species, out.width="90%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/CST_PAM_Clustering/CST_VA_Dominant_Species_Boxplot.pdf")
+knitr::include_graphics("Results/OverallEva/CST_PAM_Clustering/CST_UR_Dominant_Species_Boxplot.pdf")
+knitr::include_graphics("Results/OverallEva/CST_PAM_Clustering/CST_GUT_Dominant_Species_Boxplot.pdf")
+knitr::include_graphics("Results/OverallEva/CST_PAM_Clustering/CST_TO_Dominant_Species_Boxplot.pdf")
+```
+
+### Transition
+
+```{r CST Transsion, out.width="49%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/CST_Bray/VA_CST_Longitudinal_Transition.pdf")
+knitr::include_graphics("Results/OverallEva/CST_Bray/UR_CST_Longitudinal_Transition.pdf")
+knitr::include_graphics("Results/OverallEva/CST_Bray/GUT_CST_Longitudinal_Transition.pdf")
+knitr::include_graphics("Results/OverallEva/CST_Bray/TO_CST_Longitudinal_Transition.pdf")
+```
+
+## Bray for GUT, TO
+
+```{r CST bray, out.width="35%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/OverallEva/CST_Bray/GUT_bray_distance_boxplot.pdf")
+knitr::include_graphics("Results/OverallEva/CST_Bray/TO_bray_distance_boxplot.pdf")
+```
+
+# 2. Baseline microbial Type
+
+## Gut Type
+
+```{r responser - Gut Type - longitudinal - overall, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Responser/Gut_Type/Clinic/Gut_Type_wilcox.phen_K.heatmap.pdf")
+knitr::include_graphics("Results/Responser/Gut_Type/Clinic/Gut_Type_wilcox.phen_nonK.heatmap.pdf")
+knitr::include_graphics("Results/Responser/Gut_Type/Microbe/Paired.sample.Gut_Type.TimeDiff.wilcox.heatmap.pdf")
+```
+
+## Vagina Type
+
+```{r responser - Vagina Type - longitudinal - overall, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Responser/VA_Type/Clinic/VA_Type_wilcox.phen_K.heatmap.pdf")
+knitr::include_graphics("Results/Responser/VA_Type/Clinic/VA_Type_wilcox.phen_nonK.heatmap.pdf")
+knitr::include_graphics("Results/Responser/VA_Type/Microbe/Paired.sample.VA_Type.TimeDiff.wilcox.heatmap.pdf")
+```
+
+## Tongue Type
+
+```{r responser - Tongue Type - longitudinal - overall, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Responser/To_Type/Clinic/To_Type_wilcox.phen_K.heatmap.pdf")
+knitr::include_graphics("Results/Responser/To_Type/Clinic/To_Type_wilcox.phen_nonK.heatmap.pdf")
+knitr::include_graphics("Results/Responser/To_Type/Microbe/Paired.sample.To_Type.TimeDiff.wilcox.heatmap.pdf")
+```
+
+# 3.1 Responser - Hormone_E2
+
+## Hormone_E2 longitudinal
+
+```{r responser - Hormone_E2 - longitudinal - overall, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Responser/Change.dots.Hormone_E2.pdf")
+knitr::include_graphics("Results/Responser/Hormone_E2/Clinic/Hormone_E2_wilcox.phen_K.heatmap.pdf")
+knitr::include_graphics("Results/Responser/Hormone_E2/Clinic/Hormone_E2_wilcox.phen_nonK.heatmap.pdf")
+knitr::include_graphics("Results/Responser/Hormone_E2/Microbe/Paired.sample.Hormone_E2.TimeDiff.wilcox.heatmap.pdf")
+```
+
+## RF Model
+
+### Hormone_E2 AUC
+
+```{r Model - Hormone_E2 - AUC, out.width="32%",out.height="300px", fig.show='hold'}
+knitr::include_graphics("Results/RF_Model_Blood_3Model/Hormone_E2/CLR/Wilcoxon/Gut/Target_Response_E2/3_Test_ROC_Curve_Features_Clinical_Only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/Hormone_E2/CLR/Wilcoxon/Gut/Target_Response_E2/3_Test_ROC_Curve_Features_Microbe_only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/Hormone_E2/CLR/Wilcoxon/Gut/Target_Response_E2/3_Test_ROC_Curve_Features_Microbe_Clinical.pdf")
+```
+
+### Hormone_E2 Features
+
+```{r Model - Hormone_E2 - Features, out.width="32%",out.height="300px", fig.show='hold'}
+knitr::include_graphics("Results/RF_Model_Blood_3Model/Hormone_E2/CLR/Wilcoxon/Gut/Target_Response_E2/4_RF_Importance_Plot_Features_Clinical_Only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/Hormone_E2/CLR/Wilcoxon/Gut/Target_Response_E2/4_RF_Importance_Plot_Features_Microbe_only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/Hormone_E2/CLR/Wilcoxon/Gut/Target_Response_E2/4_RF_Importance_Plot_Features_Microbe_Clinical.pdf")
+```
+
+# 3.2 Responser - mKI
+
+## mKI longitudinal
+
+### Clinical and microbe
+
+```{r responser - mKI - longitudinal - overall, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Responser/Change.dots.mKI.new.pdf")
+
+knitr::include_graphics("Results/Responser/mKI/Clinic/mKI_wilcox.phen_K.heatmap.pdf")
+knitr::include_graphics("Results/Responser/mKI/Clinic/mKI_wilcox.phen_nonK.heatmap.pdf")
+knitr::include_graphics("Results/Responser/mKI/Microbe/Paired.sample.mKI.TimeDiff.wilcox.heatmap.pdf")
+```
+
+### CST
+
+```{r responser - mKI - longitudinal - CST, out.width="49%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Responser/mKI/CST/CST_Longitudinal_Proportions_mKI_None.pdf")
+knitr::include_graphics("Results/Responser/mKI/CST/CST_Longitudinal_Logistic_Forest_mKI_None.pdf")
+```
+
+## mKI cross (between R vs NR)
+
+```{r responser - mKI - Cross, out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Responser/mKI/Cross_Clinic/Baseline_Only_Scores_Boxplot_all.pdf")
+knitr::include_graphics("Results/Responser/mKI/Clinic/mKI_All_Features_Delta_T24.pdf")
+knitr::include_graphics("Results/Responser/mKI/Cross_Microbe_CST/mKI_CST_Cross_Logistic_Forest_Filtered_all.pdf")
+knitr::include_graphics("Results/Responser/mKI/Cross_Microbe_CST/mKI_OutcomeDiff.wilcox.heatmap.all.pdf")
+
+```
+
+## RF Model
+
+### mKI AUC
+
+```{r Model - mKI - AUC, out.width="32%",out.height="300px", fig.show='hold'}
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/3_Test_ROC_Curve_Features_Clinical_Only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/3_Test_ROC_Curve_Features_Microbe_only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/3_Test_ROC_Curve_Features_Microbe_Clinical.pdf")
+```
+
+### mKI Features
+
+```{r Model - mKI - Features, out.width="32%",out.height="300px", fig.show='hold'}
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/4_RF_Importance_Plot_Features_Clinical_Only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/4_RF_Importance_Plot_Features_Microbe_only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/4_RF_Importance_Plot_Features_Microbe_Clinical.pdf")
+```
+
+### mKI 5Fold_CV
+
+```{r Model - mKI - Curves, out.width="32%",out.height="300px", fig.show='hold'}
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/1_Feature_Count_Curve_Features_Clinical_Only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/1_Feature_Count_Curve_Features_Microbe_only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/1_Feature_Count_Curve_Features_Microbe_Clinical.pdf")
+
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/1_Train_BestFeatureCount_5Fold_CV_ROC_Features_Clinical_Only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/1_Train_BestFeatureCount_5Fold_CV_ROC_Features_Microbe_only.pdf")
+knitr::include_graphics("Results/RF_Model_Blood_3Model/mKI/CLR/Wilcoxon/Gut/Target_Response_K/1_Train_BestFeatureCount_5Fold_CV_ROC_Features_Microbe_Clinical.pdf")
+```
+
+## mKI RF_GUT_Feature
+
+```{r RF_GUT_Feature, out.width="49%",out.height="500px", fig.show='hold'}
+knitr::include_graphics("Results/RF_GUT_Feature/Dual_Direction_Plot.pdf")
+```
+
+# 4. Supplementary
+
+## Mediation
+
+```{r Mediation, out.width="32%",out.height="300px", fig.show='hold'}
+knitr::include_graphics("Results/Mediation/FOREST_ACME_FSFI_Vaginal.pdf")
+```
+
+## Other for Vagina Type
+
+```{r Supplementary,out.width="100%",out.height="400px", fig.show='hold'}
+knitr::include_graphics("Results/Microbiome_4_Points_Clean_Trend_Lines.pdf")
+knitr::include_graphics("Results/UR_VA_L.c_group_T24.pdf")
+knitr::include_graphics("Results/FSFI_L.c_group_T24.pdf")
+knitr::include_graphics("Results/FSFI_va_Baseline_group.pdf")
+```
