@@ -5,4 +5,4 @@ This repository supports the manuscript titled Heterogeneity in Multisystem Estr
 Note: To facilitate code verification during peer review while safeguarding pre-publication raw data, a pseudo-dataset containing simulated noise has been made available at https://github.com/haolilan/MHT/. Please note that this version is intended strictly for code testing and does not constitute the original study data.
 Please rest assured that the full, unperturbed raw dataset will be released in the same public repository immediately upon completion of the peer-review process and final manuscript acceptance.
 
-You can download this and run the MHT_Code_Figures_fromNonRawData.rmd
+You can download this and run the MHT_Code_Figures_fromNonRawData.rmd, and the output has already shown in the two Html files.
