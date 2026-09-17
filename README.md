@@ -1,8 +1,11 @@
 ## MHT 
 
-This repository supports the manuscript titled Heterogeneity in Multisystem Estrogenic and Site-Specific Microbiome Responses to Menopausal Hormone Therapy among Perimenopausal Women by providing the underlying methods and data analysis scripts to ensure reproducibility. (preprint: https://doi.org/10.21203/rs.3.rs-8555097/v1)
+This repository supports the manuscript titled “Heterogeneity in Multisystem Estrogenic and Site-Specific Microbiome Responses to Menopausal Hormone Therapy among Perimenopausal Women” (preprint: https://doi.org/10.21203/rs.3.rs-8555097/v1) by providing the underlying analytical pipelines and scripts to ensure computational reproducibility. The codebase in this repository is actively maintained and synchronized with the latest updates to the manuscript.
 
-Note: To facilitate code verification during peer review while safeguarding pre-publication raw data, a pseudo-dataset containing simulated noise has been made available at https://github.com/haolilan/MHT/. Please note that this version is intended strictly for code testing and does not constitute the original study data.
-Please rest assured that the full, unperturbed raw dataset will be released in the same public repository immediately upon completion of the peer-review process and final manuscript acceptance.
+To facilitate code verification during peer review while protecting pre-publication data, this repository currently hosts a pseudo-dataset generated with simulated noise. It is strictly intended for testing pipeline execution (e.g., running MHT_Code_Figures_fromNonRawData.rmd, with rendered outputs viewable in the accompanying HTML files) and does not reflect actual study findings.
 
-You can download this and run the MHT_Code_Figures_fromNonRawData.rmd, and the output has already shown in the two Html files.
+Data Availability:
+For access routes, repositories, and accession details regarding the raw datasets, please refer directly to the Data Availability Statement in the manuscript.
+
+Phenotypic Data Inquiries:
+If you require access to relevant phenotypic or clinical datasets, please contact the corresponding authors.
