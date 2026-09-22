@@ -6,6 +6,3 @@ To facilitate code verification, this repository currently hosts a pseudo-datase
 
 Data Availability:
 For access routes, repositories, and accession details regarding the raw datasets, please refer directly to the Data Availability Statement in the manuscript.
-
-Phenotypic Data Inquiries:
-If you require access to relevant phenotypic or clinical datasets, please contact the corresponding authors.
